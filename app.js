@@ -597,3 +597,172 @@ function typeText(el, text, parent, speed, cb) {
   }
   next();
 }
+
+// ── Prompt Library ──────────────────────────────────
+let currentLibrary = 'gdpr';
+
+function switchLibrary(id) {
+  currentLibrary = id;
+  document.querySelectorAll('.lib-tab').forEach(t => {
+    t.classList.toggle('active', t.dataset.lib === id);
+  });
+  renderLibrary(id);
+}
+
+function renderLibrary(id) {
+  const lib = window.PROMPT_LIBRARIES[id];
+  if (!lib) return;
+
+  // Header
+  const header = document.getElementById('lib-header');
+  header.innerHTML = `
+    <div class="lib-header-inner">
+      <div class="lib-header-flag">${lib.flag}</div>
+      <div>
+        <div class="lib-header-name">${lib.name}</div>
+        <div class="lib-header-desc">${lib.description}</div>
+      </div>
+    </div>
+  `;
+
+  // Grid
+  const grid = document.getElementById('lib-grid');
+  grid.innerHTML = lib.prompts.map(p => {
+    const chainBadge = p.chainId
+      ? `<div class="prompt-chain-badge">${p.chainTitle} · ${p.chainStep}</div>`
+      : '';
+    const typeBadge = p.type === 'standalone'
+      ? '<span class="prompt-type-badge solo">Single Prompt</span>'
+      : '<span class="prompt-type-badge chain">Prompt Chain</span>';
+    return `
+      <div class="prompt-card" onclick="openPromptModal('${id}', '${p.id}')">
+        <div class="prompt-card-top">
+          <div class="prompt-card-num">${p.num}</div>
+          ${typeBadge}
+        </div>
+        ${chainBadge}
+        <h3 class="prompt-card-title">${p.title}</h3>
+        <p class="prompt-card-desc">${p.description}</p>
+        <div class="prompt-card-tags">${p.tags.slice(0,3).map(t => `<span>${t}</span>`).join('')}</div>
+        <div class="prompt-card-footer">
+          <span class="prompt-card-model">⌘ ${p.model}</span>
+          <span class="prompt-card-time">~${p.time}</span>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function openPromptModal(libId, promptId) {
+  const lib = window.PROMPT_LIBRARIES[libId];
+  const p   = lib.prompts.find(x => x.id === promptId);
+  if (!p) return;
+
+  const prevBtn = p.prevPromptId
+    ? `<button class="btn-ghost chain-nav" onclick="openPromptModal('${libId}', '${p.prevPromptId}')">← ${p.chainStep.replace(/Step \d+ of \d+/, 'Previous step')}</button>`
+    : '';
+  const nextBtn = p.nextPromptId
+    ? `<button class="btn-primary chain-nav" onclick="openPromptModal('${libId}', '${p.nextPromptId}')">Next step →</button>`
+    : '';
+
+  const chainInfo = p.chainId ? `
+    <div class="prompt-modal-chain">
+      <span class="chain-tag">${p.chainTitle}</span>
+      <span class="chain-step-tag">${p.chainStep}</span>
+    </div>` : '';
+
+  document.getElementById('prompt-modal-inner').innerHTML = `
+    <div class="prompt-modal-header">
+      <div class="prompt-modal-num">${p.num}</div>
+      <div class="prompt-modal-meta">
+        ${chainInfo}
+        <h2 class="prompt-modal-title">${p.title}</h2>
+        <div class="prompt-modal-tags">
+          ${p.tags.map(t => `<span>${t}</span>`).join('')}
+          <span class="tag-model">⌘ ${p.model}</span>
+          <span class="tag-time">~${p.time}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="prompt-modal-section">
+      <div class="prompt-section-label">
+        <span>// PROMPT</span>
+        <button class="copy-btn" onclick="copyText('prompt-text-${p.id}')">Copy Prompt</button>
+      </div>
+      <pre class="prompt-text" id="prompt-text-${p.id}">${escapeHtml(p.prompt)}</pre>
+    </div>
+
+    <div class="prompt-modal-section">
+      <div class="prompt-section-label">
+        <span>// EXPECTED OUTPUT</span>
+        <button class="copy-btn" onclick="copyText('output-text-${p.id}')">Copy Output</button>
+      </div>
+      <div class="expected-output" id="output-text-${p.id}">${renderMarkdown(p.expectedOutput)}</div>
+    </div>
+
+    ${p.prevPromptId || p.nextPromptId ? `<div class="prompt-chain-nav">${prevBtn}${nextBtn}</div>` : ''}
+  `;
+
+  document.getElementById('prompt-modal').classList.add('open');
+}
+
+function closePromptModal() {
+  document.getElementById('prompt-modal').classList.remove('open');
+}
+
+function copyText(elementId) {
+  const el = document.getElementById(elementId);
+  const text = el.innerText || el.textContent;
+  navigator.clipboard.writeText(text).then(() => showToast('Copied to clipboard.'));
+}
+
+function escapeHtml(str) {
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+// Minimal markdown renderer for expected outputs
+function renderMarkdown(md) {
+  return md
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    // Headers
+    .replace(/^### (.+)$/gm, '<h4>$1</h4>')
+    .replace(/^## (.+)$/gm, '<h3>$1</h3>')
+    .replace(/^# (.+)$/gm, '<h2>$1</h2>')
+    // Bold
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    // Italic
+    .replace(/\*(.+?)\*/g, '<em>$1</em>')
+    // Code inline
+    .replace(/`([^`]+)`/g, '<code>$1</code>')
+    // Table rows
+    .replace(/^\|(.+)\|$/gm, (match, inner) => {
+      const cells = inner.split('|').map(c => c.trim());
+      const isDivider = cells.every(c => /^[-: ]+$/.test(c));
+      if (isDivider) return '';
+      return '<tr>' + cells.map(c => `<td>${c}</td>`).join('') + '</tr>';
+    })
+    // Wrap consecutive tr in table
+    .replace(/(<tr>.*?<\/tr>\n?)+/gs, m => `<table>${m}</table>`)
+    // Horizontal rule
+    .replace(/^---+$/gm, '<hr>')
+    // Blockquote
+    .replace(/^&gt; (.+)$/gm, '<blockquote>$1</blockquote>')
+    // List items
+    .replace(/^- (.+)$/gm, '<li>$1</li>')
+    .replace(/^(\d+)\. (.+)$/gm, '<li>$2</li>')
+    .replace(/(<li>.*?<\/li>\n?)+/gs, m => `<ul>${m}</ul>`)
+    // Line breaks
+    .replace(/\n\n/g, '</p><p>')
+    .replace(/^(?!<[htulipcb])(.+)$/gm, (m) => m ? m : '')
+    .replace(/^<\/p><p>(<[htulipcb])/gm, '$1');
+}
+
+// Init library on page show
+const _origShowPage = showPage;
+window.showPage = function(id) {
+  _origShowPage(id);
+  if (id === 'library') {
+    switchLibrary(currentLibrary);
+  }
+};
