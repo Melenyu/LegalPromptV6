@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LexiPrompt — AI Compliance Prompts for Legal Professionals</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=JetBrains+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav id="nav">
+  <div class="nav-inner">
+    <a class="nav-logo" onclick="showPage('landing')">
+      <span class="logo-bracket">[</span>LEXI<span class="logo-accent">PROMPT</span><span class="logo-bracket">]</span>
+    </a>
+    <div class="nav-links">
+      <a onclick="showPage('catalog')">Frameworks</a>
+      <a onclick="showPage('pricing')">Pricing</a>
+      <div id="nav-auth-area" class="nav-auth-area">
+        <button class="nav-link-btn" onclick="openAuthModal('login')">Sign in</button>
+        <button class="nav-cta" onclick="openAuthModal('register')">Get Started Free</button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════════════════════ LANDING -->
+<div id="page-landing" class="page active">
+  <section class="hero">
+    <div class="hero-noise"></div>
+    <div class="hero-grid-lines"></div>
+    <div class="hero-content">
+      <div class="hero-eyebrow"><span class="dot"></span> For In-House Counsel & Compliance Officers</div>
+      <h1 class="hero-title">Regulatory<br/><em>Intelligence,</em><br/>Prompt-First.</h1>
+      <p class="hero-sub">AI-generated compliance prompts for legal professionals. Build GDPR frameworks, DSP programs, AI governance policies — in hours. First 100 prompts free.</p>
+      <div class="hero-actions">
+        <button class="btn-primary" onclick="requireAuth(() => showPage('form'))">Build My Prompt — Free</button>
+        <button class="btn-ghost" onclick="showPage('catalog')">Browse Frameworks</button>
+      </div>
+      <div class="hero-stats">
+        <div class="stat"><span class="stat-num">100</span><span class="stat-label">Free Prompts</span></div>
+        <div class="stat-div"></div>
+        <div class="stat"><span class="stat-num">12+</span><span class="stat-label">Frameworks</span></div>
+        <div class="stat-div"></div>
+        <div class="stat"><span class="stat-num">6</span><span class="stat-label">AI Models Supported</span></div>
+      </div>
+    </div>
+    <div class="hero-terminal">
+      <div class="terminal-bar">
+        <span class="t-dot red"></span><span class="t-dot yellow"></span><span class="t-dot green"></span>
+        <span class="t-title">lexiprompt — generating GDPR prompt</span>
+      </div>
+      <div class="terminal-body" id="terminal-demo"></div>
+    </div>
+  </section>
+
+  <section class="frameworks-preview">
+    <div class="section-header">
+      <div class="section-label">// Prompt Library</div>
+      <h2>Compliance Frameworks</h2>
+      <p>Each prompt is AI-generated and tailored to your jurisdiction, company size, and risk profile through our intake wizard.</p>
+    </div>
+    <div class="framework-grid">
+      <div class="framework-card" onclick="selectFramework('gdpr')"><div class="card-code">01</div><div class="card-flag">🇪🇺</div><h3>GDPR</h3><p>Full data protection program: ROPA, DPIAs, processor agreements, breach response, DPO analysis.</p><div class="card-tags"><span>EU</span><span>UK</span></div><div class="card-price">Free / $19 mo</div></div>
+      <div class="framework-card" onclick="selectFramework('dsp')"><div class="card-code">02</div><div class="card-flag">🇺🇸</div><h3>DOJ Data Security Program</h3><p>28 CFR Part 202: covered data transaction analysis, prohibited party policies, audit prep.</p><div class="card-tags"><span>US Federal</span><span>National Security</span></div><div class="card-price">Free / $29 mo</div></div>
+      <div class="framework-card" onclick="selectFramework('hipaa')"><div class="card-code">03</div><div class="card-flag">🇺🇸</div><h3>HIPAA</h3><p>Privacy Rule, Security Rule, Breach Notification. BAA templates, risk assessments, workforce policies.</p><div class="card-tags"><span>Healthcare</span><span>US Federal</span></div><div class="card-price">Free / $19 mo</div></div>
+      <div class="framework-card" onclick="selectFramework('ai-act')"><div class="card-code">04</div><div class="card-flag">🇪🇺</div><h3>EU AI Act</h3><p>Risk classification, conformity assessment, technical documentation, transparency obligations.</p><div class="card-tags"><span>EU</span><span>AI Governance</span></div><div class="card-price">Free / $29 mo</div></div>
+      <div class="framework-card" onclick="selectFramework('ccpa')"><div class="card-code">05</div><div class="card-flag">🇺🇸</div><h3>CCPA / CPRA</h3><p>Consumer rights implementation, opt-out mechanisms, data inventory, vendor contracts.</p><div class="card-tags"><span>California</span><span>Consumer Privacy</span></div><div class="card-price">Free / $19 mo</div></div>
+      <div class="framework-card" onclick="selectFramework('iso27001')"><div class="card-code">06</div><div class="card-flag">🌐</div><h3>ISO 27001 / SOC 2</h3><p>ISMS gap analysis, Annex A control mapping, audit evidence collection, certification readiness.</p><div class="card-tags"><span>International</span><span>InfoSec</span></div><div class="card-price">Free / $19 mo</div></div>
+    </div>
+    <div class="section-cta">
+      <button class="btn-primary" onclick="requireAuth(() => showPage('form'))">Customize Your Prompt Pack →</button>
+    </div>
+  </section>
+
+  <section class="how-it-works">
+    <div class="section-header"><div class="section-label">// Process</div><h2>How It Works</h2></div>
+    <div class="steps">
+      <div class="step"><div class="step-num">01</div><h4>Create Free Account</h4><p>Sign up in 10 seconds. Your first 100 prompts are completely free — no card required.</p></div>
+      <div class="step-arrow">→</div>
+      <div class="step"><div class="step-num">02</div><h4>Answer the Intake Form</h4><p>Tell us your framework, jurisdiction, industry, company size, and compliance goals. We remember your answers for next time.</p></div>
+      <div class="step-arrow">→</div>
+      <div class="step"><div class="step-num">03</div><h4>AI Writes Your Prompt</h4><p>Claude generates a precision compliance prompt tailored to your exact legal context — live, in seconds.</p></div>
+      <div class="step-arrow">→</div>
+      <div class="step"><div class="step-num">04</div><h4>Deploy to Any AI</h4><p>Copy your prompt to Claude, GPT-4, Harvey, or any enterprise AI. We tell you which model works best and how to format it.</p></div>
+    </div>
+  </section>
+
+  <section class="testimonials">
+    <div class="section-header"><div class="section-label">// Trusted By</div><h2>What Legal Teams Say</h2></div>
+    <div class="testimonial-grid">
+      <div class="testimonial"><div class="t-quote">"Cut our GDPR gap assessment from 3 weeks to 2 days. The generated prompts understood exactly what a mid-market SaaS company needs."</div><div class="t-author"><span class="t-name">Sarah K.</span><span class="t-role">Chief Privacy Officer, Series B SaaS</span></div></div>
+      <div class="testimonial"><div class="t-quote">"The DSP compliance prompt was the most technically accurate AI output I've seen. Covered the 28 CFR Part 202 nuances we needed — scope limitation strategy and everything."</div><div class="t-author"><span class="t-name">Marcus T.</span><span class="t-role">General Counsel, Health-Tech Platform</span></div></div>
+      <div class="testimonial"><div class="t-quote">"Used the EU AI Act prompt to build our entire governance policy stack. The model recommendation feature alone saved hours — pointed us to Gemini for the full regulation text analysis."</div><div class="t-author"><span class="t-name">Priya N.</span><span class="t-role">Head of Legal, AI Infrastructure Co.</span></div></div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-logo"><span class="logo-bracket">[</span>LEXI<span class="logo-accent">PROMPT</span><span class="logo-bracket">]</span></div>
+      <div class="footer-note">Not legal advice. LexiPrompt provides AI prompt engineering for legal professionals. Always review AI outputs with qualified counsel.</div>
+      <div class="footer-links"><a onclick="showPage('pricing')">Pricing</a><a href="#">Terms</a><a href="#">Privacy</a></div>
+    </div>
+  </footer>
+</div>
+
+<!-- ══════════════════════════════════════════════ CATALOG -->
+<div id="page-catalog" class="page">
+  <section class="inner-hero"><h1>Framework Library</h1><p>Choose a framework to begin. Your first 100 prompts are free.</p></section>
+  <section class="catalog-full">
+    <div class="catalog-filter">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="us">US Federal</button>
+      <button class="filter-btn" data-filter="eu">European</button>
+      <button class="filter-btn" data-filter="intl">International</button>
+      <button class="filter-btn" data-filter="sector">Sector / Custom</button>
+    </div>
+    <div class="catalog-grid" id="catalog-grid"></div>
+  </section>
+</div>
+
+<!-- ══════════════════════════════════════════════ FORM -->
+<div id="page-form" class="page">
+  <section class="form-wrapper">
+    <div class="form-sidebar">
+      <div class="sidebar-title">Build Your<br/><em>Compliance Prompt</em></div>
+      <div class="progress-steps" id="progress-steps">
+        <div class="prog-step active" data-step="1"><span class="prog-num">01</span><span class="prog-label">Framework</span></div>
+        <div class="prog-step" data-step="2"><span class="prog-num">02</span><span class="prog-label">Company Profile</span></div>
+        <div class="prog-step" data-step="3"><span class="prog-num">03</span><span class="prog-label">Risk Parameters</span></div>
+        <div class="prog-step" data-step="4"><span class="prog-num">04</span><span class="prog-label">Generated Prompt</span></div>
+      </div>
+      <div class="usage-sidebar" id="usage-sidebar"></div>
+      <div class="sidebar-note">Your answers are saved automatically. We remember your profile for future sessions.</div>
+    </div>
+    <div class="form-main">
+
+      <!-- STEP 1 -->
+      <div class="form-step active" id="step-1">
+        <div class="step-header">
+          <div class="step-eyebrow">Step 01 / 03</div>
+          <h2>Select Framework</h2>
+          <p>Which regulatory framework do you need to implement?</p>
+        </div>
+        <div class="framework-selector" id="framework-selector">
+          <label class="fw-option"><input type="radio" name="framework" value="gdpr" /><div class="fw-card"><span class="fw-flag">🇪🇺</span><span class="fw-name">GDPR</span><span class="fw-desc">EU General Data Protection Regulation</span></div></label>
+          <label class="fw-option"><input type="radio" name="framework" value="dsp" /><div class="fw-card"><span class="fw-flag">🇺🇸</span><span class="fw-name">DOJ Data Security Program</span><span class="fw-desc">28 CFR Part 202 — National Security</span></div></label>
+          <label class="fw-option"><input type="radio" name="framework" value="hipaa" /><div class="fw-card"><span class="fw-flag">🇺🇸</span><span class="fw-name">HIPAA</span><span class="fw-desc">Health Insurance Portability & Accountability</span></div></label>
+          <label class="fw-option"><input type="radio" name="framework" value="ai-act" /><div class="fw-card"><span class="fw-flag">🇪🇺</span><span class="fw-name">EU AI Act</span><span class="fw-desc">Artificial Intelligence Regulation 2024/1689</span></div></label>
+          <label class="fw-option"><input type="radio" name="framework" value="ccpa" /><div class="fw-card"><span class="fw-flag">🇺🇸</span><span class="fw-name">CCPA / CPRA</span><span class="fw-desc">California Consumer Privacy Act</span></div></label>
+          <label class="fw-option"><input type="radio" name="framework" value="iso27001" /><div class="fw-card"><span class="fw-flag">🌐</span><span class="fw-name">ISO 27001 / SOC 2</span><span class="fw-desc">Information Security Management</span></div></label>
+          <label class="fw-option"><input type="radio" name="framework" value="multi" /><div class="fw-card"><span class="fw-flag">⚖️</span><span class="fw-name">Multi-Jurisdiction</span><span class="fw-desc">Cross-border compliance stack</span></div></label>
+          <label class="fw-option"><input type="radio" name="framework" value="custom" /><div class="fw-card"><span class="fw-flag">✏️</span><span class="fw-name">Custom / Other</span><span class="fw-desc">Specify your own regulation</span></div></label>
+        </div>
+        <div id="custom-framework-input" style="display:none" class="custom-input-wrap">
+          <label>Describe the regulation or compliance area:</label>
+          <textarea id="custom-framework-text" rows="3" placeholder="e.g., Brazil LGPD + ANPD guidelines for fintech operating in São Paulo..."></textarea>
+        </div>
+        <div class="form-nav"><button class="btn-primary" onclick="goToStep(2)">Continue →</button></div>
+      </div>
+
+      <!-- STEP 2 -->
+      <div class="form-step" id="step-2">
+        <div class="step-header">
+          <div class="step-eyebrow">Step 02 / 03</div>
+          <h2>Company Profile</h2>
+          <p>This is saved to your account and pre-filled next time.</p>
+        </div>
+        <div class="form-fields">
+          <div class="field-group">
+            <label>Industry / Sector <span class="req">*</span></label>
+            <select id="industry">
+              <option value="">Select industry...</option>
+              <option value="Health Technology / Digital Health">Health Technology / Digital Health</option>
+              <option value="Financial Technology / Fintech">Financial Technology / Fintech</option>
+              <option value="SaaS / Cloud Software">SaaS / Cloud Software</option>
+              <option value="AI / Machine Learning">AI / Machine Learning</option>
+              <option value="E-commerce / Retail">E-commerce / Retail</option>
+              <option value="Pharmaceutical / Biotech">Pharmaceutical / Biotech</option>
+              <option value="Media / Publishing / AdTech">Media / Publishing / AdTech</option>
+              <option value="Manufacturing / Industrial">Manufacturing / Industrial</option>
+              <option value="Professional Services / Consulting">Professional Services / Consulting</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="field-group">
+            <label>Company Size <span class="req">*</span></label>
+            <div class="radio-row">
+              <label class="radio-opt"><input type="radio" name="size" value="startup" /><span>Startup (&lt;50)</span></label>
+              <label class="radio-opt"><input type="radio" name="size" value="smb" /><span>SMB (50–500)</span></label>
+              <label class="radio-opt"><input type="radio" name="size" value="mid" /><span>Mid-Market (500–5K)</span></label>
+              <label class="radio-opt"><input type="radio" name="size" value="enterprise" /><span>Enterprise (5K+)</span></label>
+            </div>
+          </div>
+          <div class="field-group">
+            <label>Primary Jurisdictions <span class="req">*</span></label>
+            <div class="checkbox-grid" id="jurisdictions">
+              <label class="check-opt"><input type="checkbox" value="United States" /><span>United States</span></label>
+              <label class="check-opt"><input type="checkbox" value="European Union" /><span>European Union</span></label>
+              <label class="check-opt"><input type="checkbox" value="United Kingdom" /><span>United Kingdom</span></label>
+              <label class="check-opt"><input type="checkbox" value="Canada" /><span>Canada</span></label>
+              <label class="check-opt"><input type="checkbox" value="APAC" /><span>APAC</span></label>
+              <label class="check-opt"><input type="checkbox" value="Latin America" /><span>Latin America</span></label>
+              <label class="check-opt"><input type="checkbox" value="MENA" /><span>MENA</span></label>
+              <label class="check-opt"><input type="checkbox" value="Global" /><span>Global / Multi-region</span></label>
+            </div>
+          </div>
+          <div class="field-group">
+            <label>Do you process personal data of EU/UK residents?</label>
+            <div class="radio-row">
+              <label class="radio-opt"><input type="radio" name="eudata" value="yes" /><span>Yes</span></label>
+              <label class="radio-opt"><input type="radio" name="eudata" value="no" /><span>No</span></label>
+              <label class="radio-opt"><input type="radio" name="eudata" value="unsure" /><span>Unsure</span></label>
+            </div>
+          </div>
+          <div class="field-group">
+            <label>Number of end users / data subjects</label>
+            <select id="users">
+              <option value="">Select range...</option>
+              <option value="fewer than 10,000">&lt; 10,000</option>
+              <option value="10,000 to 1 million">10K – 1M</option>
+              <option value="1 million to 10 million">1M – 10M</option>
+              <option value="over 10 million">10M+</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-nav">
+          <button class="btn-ghost" onclick="goToStep(1)">← Back</button>
+          <button class="btn-primary" onclick="goToStep(3)">Continue →</button>
+        </div>
+      </div>
+
+      <!-- STEP 3 -->
+      <div class="form-step" id="step-3">
+        <div class="step-header">
+          <div class="step-eyebrow">Step 03 / 03</div>
+          <h2>Risk Parameters & Goals</h2>
+        </div>
+        <div class="form-fields">
+          <div class="field-group">
+            <label>Current Compliance Maturity <span class="req">*</span></label>
+            <div class="maturity-selector">
+              <label class="mat-opt"><input type="radio" name="maturity" value="zero" /><div class="mat-card"><span class="mat-icon">🌱</span><span class="mat-name">Starting from Zero</span><span class="mat-desc">No formal program exists yet</span></div></label>
+              <label class="mat-opt"><input type="radio" name="maturity" value="partial" /><div class="mat-card"><span class="mat-icon">🔨</span><span class="mat-name">Partial / Ad-Hoc</span><span class="mat-desc">Some policies, no systematic approach</span></div></label>
+              <label class="mat-opt"><input type="radio" name="maturity" value="established" /><div class="mat-card"><span class="mat-icon">⚙️</span><span class="mat-name">Established Program</span><span class="mat-desc">Needs gap analysis or update</span></div></label>
+              <label class="mat-opt"><input type="radio" name="maturity" value="audit" /><div class="mat-card"><span class="mat-icon">🔍</span><span class="mat-name">Audit Response</span><span class="mat-desc">Responding to regulator inquiry</span></div></label>
+            </div>
+          </div>
+          <div class="field-group">
+            <label>Deliverables Needed <small>(select all that apply)</small></label>
+            <div class="checkbox-grid">
+              <label class="check-opt"><input type="checkbox" id="del-gap" /><span>Gap Assessment</span></label>
+              <label class="check-opt"><input type="checkbox" id="del-policy" /><span>Policy Templates</span></label>
+              <label class="check-opt"><input type="checkbox" id="del-ropa" /><span>Records of Processing (ROPA)</span></label>
+              <label class="check-opt"><input type="checkbox" id="del-dpia" /><span>DPIA / PIA Template</span></label>
+              <label class="check-opt"><input type="checkbox" id="del-vendor" /><span>Vendor Due Diligence</span></label>
+              <label class="check-opt"><input type="checkbox" id="del-breach" /><span>Breach Response Plan</span></label>
+              <label class="check-opt"><input type="checkbox" id="del-training" /><span>Staff Training Materials</span></label>
+              <label class="check-opt"><input type="checkbox" id="del-board" /><span>Board / Executive Reporting</span></label>
+            </div>
+          </div>
+          <div class="field-group">
+            <label>Key Risks or Context <small>(optional — the more detail, the better the prompt)</small></label>
+            <textarea id="risk-notes" rows="4" placeholder="e.g., We use third-party AI vendors for health data analysis, have no DPO, and are subject to an upcoming audit. We also process data of EU minors and use US cloud providers..."></textarea>
+          </div>
+          <div class="field-group">
+            <label>Preferred Output Style</label>
+            <div class="radio-row">
+              <label class="radio-opt"><input type="radio" name="output" value="structured" checked /><span>Structured Framework</span></label>
+              <label class="radio-opt"><input type="radio" name="output" value="stepbystep" /><span>Step-by-Step Playbook</span></label>
+              <label class="radio-opt"><input type="radio" name="output" value="memo" /><span>Legal Memo Format</span></label>
+              <label class="radio-opt"><input type="radio" name="output" value="checklist" /><span>Checklist / Action Items</span></label>
+            </div>
+          </div>
+        </div>
+        <div class="form-nav">
+          <button class="btn-ghost" onclick="goToStep(2)">← Back</button>
+          <button class="btn-primary" onclick="generatePrompt()">Generate Prompt with AI →</button>
+        </div>
+      </div>
+
+      <!-- STEP 4 — RESULT -->
+      <div class="form-step" id="step-4">
+        <div class="step-header">
+          <div class="step-eyebrow">Generated Prompt</div>
+          <h2 id="result-title">Compliance Framework Prompt</h2>
+          <p>AI-generated and tailored to your profile. Copy it directly into your preferred AI model.</p>
+        </div>
+
+        <!-- Generated prompt output -->
+        <div id="generate-area" class="generate-area">
+          <div class="generating-placeholder">
+            <div class="gen-spinner"></div>
+            <span>Initializing generation…</span>
+          </div>
+        </div>
+
+        <!-- Model recommendations -->
+        <div class="model-recs-section">
+          <div class="section-label" style="margin-bottom:1rem">// Recommended Models for This Prompt</div>
+          <div id="model-recs" class="model-recs-grid"></div>
+        </div>
+
+        <div class="form-nav" style="margin-top:2rem">
+          <button class="btn-ghost" onclick="goToStep(3)">← Edit Parameters</button>
+          <button class="btn-ghost" onclick="showPage('dashboard')">View History</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ══════════════════════════════════════════════ DASHBOARD -->
+<div id="page-dashboard" class="page">
+  <section class="inner-hero" style="text-align:left;max-width:1200px;padding-bottom:1rem">
+    <div class="section-label">// My Account</div>
+    <h1 id="dash-name">Dashboard</h1>
+    <p id="dash-email" style="color:var(--text-3);font-size:13px"></p>
+  </section>
+  <section class="dashboard-body">
+    <div class="dash-grid">
+      <div class="dash-main">
+        <!-- Usage -->
+        <div class="dash-card">
+          <div class="dash-card-label">// Usage</div>
+          <div class="dash-stats-row">
+            <div class="dash-stat"><span class="ds-num" id="dash-count">0</span><span class="ds-label">Prompts Generated</span></div>
+            <div class="dash-stat"><span class="ds-num gold" id="dash-rem">—</span><span class="ds-label">Remaining</span></div>
+            <div class="dash-stat"><span class="ds-num" id="dash-plan">Free</span><span class="ds-label">Current Plan</span></div>
+          </div>
+          <div class="usage-bar">
+            <div class="usage-fill" id="usage-bar-fill" style="width:0%"></div>
+          </div>
+          <div style="display:flex;gap:1rem;margin-top:1rem">
+            <button class="btn-primary" onclick="showPage('form')">+ New Prompt</button>
+            <button class="btn-ghost" onclick="showUpgradeModal()">Upgrade Plan</button>
+          </div>
+        </div>
+
+        <!-- History -->
+        <div class="dash-card">
+          <div class="dash-card-label">// Prompt History</div>
+          <div id="dash-history" class="dash-history"></div>
+        </div>
+      </div>
+
+      <div class="dash-side">
+        <!-- Saved Profile -->
+        <div class="dash-card">
+          <div class="dash-card-label">// Saved Profile</div>
+          <p style="font-size:12px;color:var(--text-3);margin-bottom:1rem">These answers pre-fill your intake form automatically.</p>
+          <div class="form-fields">
+            <div class="field-group">
+              <label>Industry</label>
+              <select id="dash-pref-industry" onchange="LP_STORE.saveProfile({industry: this.value})">
+                <option value="">—</option>
+                <option value="Health Technology / Digital Health">Health Technology / Digital Health</option>
+                <option value="Financial Technology / Fintech">Financial Technology / Fintech</option>
+                <option value="SaaS / Cloud Software">SaaS / Cloud Software</option>
+                <option value="AI / Machine Learning">AI / Machine Learning</option>
+                <option value="E-commerce / Retail">E-commerce / Retail</option>
+                <option value="Professional Services / Consulting">Professional Services / Consulting</option>
+              </select>
+            </div>
+            <div class="field-group">
+              <label>Default Company Size</label>
+              <div class="radio-row">
+                <label class="radio-opt"><input type="radio" name="dash-size" value="startup" onchange="LP_STORE.saveProfile({size:'startup'})" /><span>Startup</span></label>
+                <label class="radio-opt"><input type="radio" name="dash-size" value="smb" onchange="LP_STORE.saveProfile({size:'smb'})" /><span>SMB</span></label>
+                <label class="radio-opt"><input type="radio" name="dash-size" value="mid" onchange="LP_STORE.saveProfile({size:'mid'})" /><span>Mid-Market</span></label>
+                <label class="radio-opt"><input type="radio" name="dash-size" value="enterprise" onchange="LP_STORE.saveProfile({size:'enterprise'})" /><span>Enterprise</span></label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ══════════════════════════════════════════════ PRICING -->
+<div id="page-pricing" class="page">
+  <section class="inner-hero"><h1>Simple, Transparent Pricing</h1><p>Start free. Upgrade when you need more.</p></section>
+  <section class="pricing-section">
+    <div class="pricing-grid">
+      <div class="pricing-card">
+        <div class="price-label">Free</div>
+        <div class="price-amount">$0</div>
+        <div class="price-desc">First 100 prompts</div>
+        <ul class="price-features">
+          <li>✓ 100 AI-generated prompts</li>
+          <li>✓ All 12 compliance frameworks</li>
+          <li>✓ Saved client profile</li>
+          <li>✓ Prompt history</li>
+          <li>✓ Model recommendations</li>
+          <li class="muted">✗ Unlimited prompts</li>
+          <li class="muted">✗ Multi-jurisdiction stack</li>
+          <li class="muted">✗ Custom frameworks</li>
+        </ul>
+        <button class="btn-ghost" onclick="openAuthModal('register')">Get Started Free</button>
+      </div>
+      <div class="pricing-card featured">
+        <div class="featured-badge">Most Popular</div>
+        <div class="price-label">Pro</div>
+        <div class="price-amount">$29<span style="font-size:1.2rem;font-family:var(--font-body)">/mo</span></div>
+        <div class="price-desc">per user</div>
+        <ul class="price-features">
+          <li>✓ Unlimited AI-generated prompts</li>
+          <li>✓ All 12 frameworks incl. Multi-Jurisdiction</li>
+          <li>✓ Custom framework builder</li>
+          <li>✓ Prompt history (unlimited)</li>
+          <li>✓ Priority model recommendations</li>
+          <li>✓ Prompt export (PDF, DOCX)</li>
+          <li class="muted">✗ Team seats</li>
+        </ul>
+        <button class="btn-primary" onclick="requireAuth(() => selectPlan('pro'))">Start Pro →</button>
+      </div>
+      <div class="pricing-card">
+        <div class="price-label">Team</div>
+        <div class="price-amount">$99<span style="font-size:1.2rem;font-family:var(--font-body)">/mo</span></div>
+        <div class="price-desc">up to 5 users</div>
+        <ul class="price-features">
+          <li>✓ Everything in Pro</li>
+          <li>✓ 5 team seats</li>
+          <li>✓ Shared prompt library</li>
+          <li>✓ Client matter tagging</li>
+          <li>✓ White-label output</li>
+          <li>✓ Usage analytics</li>
+          <li>✓ Priority support</li>
+        </ul>
+        <button class="btn-ghost" onclick="requireAuth(() => selectPlan('team'))">Start Team →</button>
+      </div>
+    </div>
+    <div class="faq-section">
+      <h3>Frequently Asked Questions</h3>
+      <div class="faq-grid">
+        <div class="faq-item"><div class="faq-q">Is this legal advice?</div><div class="faq-a">No. LexiPrompt provides AI prompt engineering tools for legal professionals. Outputs must be reviewed by qualified counsel before use.</div></div>
+        <div class="faq-item"><div class="faq-q">Which AI models can I use the prompts with?</div><div class="faq-a">All major models — Claude (Anthropic), GPT-4o (OpenAI), Gemini (Google), Harvey/GC AI, and any enterprise AI that accepts system prompts.</div></div>
+        <div class="faq-item"><div class="faq-q">What does "100 free prompts" mean?</div><div class="faq-a">Each time you complete the intake form and generate a prompt, that counts as one. You can generate 100 prompts across any frameworks before needing a paid plan.</div></div>
+        <div class="faq-item"><div class="faq-q">Do you store my API key?</div><div class="faq-a">Your Anthropic API key is stored in your browser's localStorage only — it is never sent to LexiPrompt servers. Prompts are generated directly between your browser and Anthropic's API.</div></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ═══════════════ MODALS ═══════════════ -->
+
+<!-- Auth Modal -->
+<div id="auth-modal" class="modal-overlay" onclick="if(event.target===this) closeAuthModal()">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeAuthModal()">✕</button>
+    <h2 id="auth-modal-title">Sign In</h2>
+
+    <form id="auth-login-form" onsubmit="doLogin(event)">
+      <div class="field-group"><label>Email</label><input type="email" id="login-email" required placeholder="you@company.com" /></div>
+      <div class="field-group"><label>Password</label><input type="password" id="login-pass" required placeholder="••••••••" /></div>
+      <div class="auth-error" id="login-error"></div>
+      <button type="submit" class="btn-primary" style="width:100%;margin-top:1rem">Sign In</button>
+    </form>
+
+    <form id="auth-register-form" style="display:none" onsubmit="doRegister(event)">
+      <div class="field-group"><label>Full Name</label><input type="text" id="reg-name" required placeholder="Jane Smith" /></div>
+      <div class="field-group"><label>Work Email</label><input type="email" id="reg-email" required placeholder="you@company.com" /></div>
+      <div class="field-group"><label>Password</label><input type="password" id="reg-pass" required placeholder="Min. 6 characters" /></div>
+      <div class="auth-error" id="reg-error"></div>
+      <button type="submit" class="btn-primary" style="width:100%;margin-top:1rem">Create Free Account</button>
+      <div class="modal-free-note">✓ 100 free prompts · No credit card required</div>
+    </form>
+
+    <div class="auth-switch" id="auth-switch-text">
+      No account? <a onclick="switchAuthMode('register')">Create one free →</a>
+    </div>
+  </div>
+</div>
+
+<!-- Upgrade Modal -->
+<div id="upgrade-modal" class="modal-overlay" onclick="if(event.target===this) closeUpgradeModal()">
+  <div class="modal-box modal-wide">
+    <button class="modal-close" onclick="closeUpgradeModal()">✕</button>
+    <h2>You've Used Your 100 Free Prompts</h2>
+    <p style="color:var(--text-2);margin:0.75rem 0 2rem">Upgrade to continue generating unlimited compliance prompts.</p>
+    <div class="upgrade-options">
+      <div class="upgrade-opt" onclick="selectPlan('pro')">
+        <div class="uo-name">Pro</div>
+        <div class="uo-price">$29<span>/mo</span></div>
+        <div class="uo-desc">Unlimited prompts · All frameworks · 1 user</div>
+        <button class="btn-primary" style="width:100%;margin-top:1rem">Choose Pro</button>
+      </div>
+      <div class="upgrade-opt featured" onclick="selectPlan('team')">
+        <div class="uo-badge">Best Value</div>
+        <div class="uo-name">Team</div>
+        <div class="uo-price">$99<span>/mo</span></div>
+        <div class="uo-desc">Everything in Pro · 5 seats · Shared library</div>
+        <button class="btn-primary" style="width:100%;margin-top:1rem">Choose Team</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- History Modal -->
+<div id="history-modal" class="modal-overlay" onclick="if(event.target===this) closeHistoryModal()">
+  <div class="modal-box modal-wide">
+    <button class="modal-close" onclick="closeHistoryModal()">✕</button>
+    <div class="history-modal-header">
+      <div id="history-modal-fw" class="history-modal-fw"></div>
+      <div id="history-modal-date" style="font-size:12px;color:var(--text-3)"></div>
+    </div>
+    <pre id="history-modal-content" class="history-modal-content"></pre>
+    <div style="display:flex;gap:1rem;margin-top:1.5rem">
+      <button class="btn-primary" onclick="navigator.clipboard.writeText(document.getElementById('history-modal-content').textContent).then(()=>showToast('Copied!'))">Copy Prompt</button>
+      <button class="btn-ghost" onclick="closeHistoryModal()">Close</button>
+    </div>
+  </div>
+</div>
+
+<script src="config.js"></script>
+<script src="storage.js"></script>
+<script src="ai-engine.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
